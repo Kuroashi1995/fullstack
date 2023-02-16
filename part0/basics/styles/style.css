@@ -1,0 +1,47 @@
+html {
+    font-size: 16px;
+    font-family: 'Roboto Condensed', sans-serif;
+    background-color: cornsilk;
+}
+
+body {
+    width: 600px;
+    margin: 0 auto;
+    background-color: aliceblue;
+    padding: 0 20px 20px 20px;
+    border: 5px solid black;
+}
+
+h1 {
+    margin: 0;
+    padding: 20px 0;
+    color:chocolate;
+    text-shadow: 3px 3px 3px black;
+    font-size: 60px;
+    text-align: center;
+}
+h3 {
+    text-align: center;
+}
+
+img {
+    display: block;
+    margin: 0 auto;
+}
+
+p{
+    font-size: 16px;
+    /* line-height: 12px; */
+    letter-spacing: 1px;
+}
+li {
+    font-size: 16px;
+}
+
+#music-video {
+    text-decoration: none;
+}
+
+#music-video:hover {
+    color: red;
+}
