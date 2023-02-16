@@ -26,6 +26,24 @@
     <p>Aprovechando este espacio publicitario, tome tambien <a id="music-video" href="https://youtu.be/SEgE2KaDM5k">este video</a> de musica purechi</p>
     <h3>Tome su Stitch de apoyo emocional</h3>
     <img src="https://lumiere-a.akamaihd.net/v1/images/stitch_16x9_9ac13651.png?region=0,0,1152,648&width=768" alt="Stitch de apoyo emocional" width="300">
-    
+    <form action="/part0/basics/views/form_sent.html" method="post">
+        <ul id="form_ul">
+            <li>
+                <label for="name">Nombre:</label>
+                <input type="text" name="user_name" id="name" placeholder="Tiburcio">
+            </li>
+            <li>
+                <label for="mail">Mail:</label>
+                <input type="email" name="user_mail" id="mail" placeholder="tiburcin@example.com">
+            </li>
+            <li>
+                <label for="msg">Mensaje:</label>
+                <textarea name="user_message" id="msg" placeholder="Escribe tu mensaje aqui"></textarea>
+            </li>
+            <li class="button">
+                <button type="submit">Enviar</button>
+            </li>
+        </ul>
+    </form>
 </body>
 </html>
