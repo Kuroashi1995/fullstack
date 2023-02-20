@@ -1,15 +1,20 @@
+import Part from "./Part";
+
 function Content(props) {
   return (
     <div>
-      <p>
-        {props.partsExercises.parts[0]} {props.partsExercises.exercises[0]}
-      </p>
-      <p>
-        {props.partsExercises.parts[1]} {props.partsExercises.exercises[1]}
-      </p>
-      <p>
-        {props.partsExercises.parts[2]} {props.partsExercises.exercises[2]}
-      </p>
+      <Part
+        part={props.partsExercises.parts[0]}
+        exercises={props.partsExercises.exercises[0]}
+      />
+      <Part
+        part={props.partsExercises.parts[1]}
+        exercises={props.partsExercises.exercises[1]}
+      />
+      <Part
+        part={props.partsExercises.parts[2]}
+        exercises={props.partsExercises.exercises[2]}
+      />
     </div>
   );
 }
