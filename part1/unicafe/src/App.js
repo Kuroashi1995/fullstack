@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 const Statistics = ({ reviews }) => {
+  const total = reviews.good + reviews.neutral + reviews.bad;
   return (
     <div>
       <h1>Statistics</h1>
@@ -8,6 +9,10 @@ const Statistics = ({ reviews }) => {
         <li>good {reviews.good}</li>
         <li>neutral {reviews.neutral}</li>
         <li>bad {reviews.bad}</li>
+        <li>all {total}</li>
+        <li>
+          positive {reviews.good === 0 ? 0 : (reviews.good / total) * 100}%
+        </li>
       </ul>
     </div>
   );
