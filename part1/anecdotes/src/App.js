@@ -1,12 +1,13 @@
 import { useState } from "react";
 
-const GenerateButton = ({ callback, anecdoteNumber }) => {
+const Button = ({ callback, currentAnecdote, displayText }) => {
   return (
-    <button onClick={() => callback(anecdoteNumber)}>Next Anecdote</button>
+    <button onClick={() => callback(currentAnecdote)}>{displayText}</button>
   );
 };
 function App() {
   const [anecdoteNumber, setAnecdoteNumber] = useState(0);
+  const [anecdotesVotes, setAnecdoteVotes] = useState([0, 0, 0, 0, 0, 0, 0, 0]);
   const anecdotes = [
     "If it hurts, do it more often.",
     "Adding manpower to a late software project makes it later!",
@@ -17,20 +18,32 @@ function App() {
     "Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.",
     "The only way to go fast, is to go well.",
   ];
-  const generateRandomNumber = (anecdoteNumber) => {
+  const nextAnecdote = (currentAnecdote) => {
     let number;
     do {
       number = Math.floor(Math.random() * 8);
-    } while (number === anecdoteNumber);
-    console.log(number, anecdoteNumber);
+    } while (number === currentAnecdote);
+    console.log(number, currentAnecdote);
     setAnecdoteNumber(number);
+  };
+  const handleVote = (index) => {
+    const newVotes = [...anecdotesVotes];
+    newVotes[index] += 1;
+    setAnecdoteVotes(newVotes);
   };
   return (
     <div>
       <p>{anecdotes[anecdoteNumber]}</p>
-      <GenerateButton
-        callback={generateRandomNumber}
-        anecdoteNumber={anecdoteNumber}
+      <p>votes: {anecdotesVotes[anecdoteNumber]}</p>
+      <Button
+        callback={handleVote}
+        currentAnecdote={anecdoteNumber}
+        displayText={"vote"}
+      />
+      <Button
+        callback={nextAnecdote}
+        currentAnecdote={anecdoteNumber}
+        displayText={"Next Anecdote"}
       />
     </div>
   );
