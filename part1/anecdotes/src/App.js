@@ -31,10 +31,25 @@ function App() {
     newVotes[index] += 1;
     setAnecdoteVotes(newVotes);
   };
+  const MVPAnecdote = ({ votesArray, anecdotesArray }) => {
+    console.log(
+      votesArray,
+      anecdotesArray,
+      anecdotesArray[Math.max(...votesArray)]
+    );
+    return (
+      <div>
+        <h1>Most Voted Anecdote</h1>
+        <p>{anecdotesArray[votesArray.indexOf(Math.max(...votesArray))]}</p>
+        <p>with {Math.max(...votesArray)} votes</p>
+      </div>
+    );
+  };
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       <p>{anecdotes[anecdoteNumber]}</p>
-      <p>votes: {anecdotesVotes[anecdoteNumber]}</p>
+      <p>has {anecdotesVotes[anecdoteNumber]} votes</p>
       <Button
         callback={handleVote}
         currentAnecdote={anecdoteNumber}
@@ -45,6 +60,7 @@ function App() {
         currentAnecdote={anecdoteNumber}
         displayText={"Next Anecdote"}
       />
+      <MVPAnecdote votesArray={anecdotesVotes} anecdotesArray={anecdotes} />
     </div>
   );
 }
