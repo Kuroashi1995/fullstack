@@ -7,25 +7,27 @@ const Statistics = ({ reviews }) => {
       <div>
         <h1>Statistics</h1>
         {
-          <ul>
-            <DisplayStatistic
-              displayStatistic={reviews.good}
-              displayText={"good"}
-            />
-            <DisplayStatistic
-              displayStatistic={reviews.neutral}
-              displayText={"neutral"}
-            />
-            <DisplayStatistic
-              displayStatistic={reviews.bad}
-              displayText={"bad"}
-            />
-            <DisplayStatistic displayStatistic={total} displayText={"all"} />
-            <DisplayStatistic
-              displayStatistic={(reviews.good / total) * 100}
-              displayText={"positive"}
-            />
-          </ul>
+          <table>
+            <tbody>
+              <DisplayStatistic
+                displayStatistic={reviews.good}
+                displayText={"good"}
+              />
+              <DisplayStatistic
+                displayStatistic={reviews.neutral}
+                displayText={"neutral"}
+              />
+              <DisplayStatistic
+                displayStatistic={reviews.bad}
+                displayText={"bad"}
+              />
+              <DisplayStatistic displayStatistic={total} displayText={"all"} />
+              <DisplayStatistic
+                displayStatistic={(reviews.good / total) * 100 + "%"}
+                displayText={"positive"}
+              />
+            </tbody>
+          </table>
         }
       </div>
     );
@@ -42,9 +44,10 @@ const Button = ({ handleClick, displayText }) => {
 
 const DisplayStatistic = ({ displayStatistic, displayText }) => {
   return (
-    <li>
-      {displayText}: {displayStatistic}
-    </li>
+    <tr>
+      <td>{displayText}:</td>
+      <td>{displayStatistic}</td>
+    </tr>
   );
 };
 function App() {
