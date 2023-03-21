@@ -2,33 +2,51 @@ import { useState } from "react";
 
 const Statistics = ({ reviews }) => {
   const total = reviews.good + reviews.neutral + reviews.bad;
+  if (reviews.good !== 0 || reviews.neutral !== 0 || reviews.bad !== 0) {
+    return (
+      <div>
+        <h1>Statistics</h1>
+        {
+          <ul>
+            <DisplayStatistic
+              displayStatistic={reviews.good}
+              displayText={"good"}
+            />
+            <DisplayStatistic
+              displayStatistic={reviews.neutral}
+              displayText={"neutral"}
+            />
+            <DisplayStatistic
+              displayStatistic={reviews.bad}
+              displayText={"bad"}
+            />
+            <DisplayStatistic displayStatistic={total} displayText={"all"} />
+            <DisplayStatistic
+              displayStatistic={(reviews.good / total) * 100}
+              displayText={"positive"}
+            />
+          </ul>
+        }
+      </div>
+    );
+  } else {
+    return <h2>No statistics available</h2>;
+  }
+};
+
+const Button = ({ handleClick, displayText }) => {
   return (
-    <div>
-      <h1>Statistics</h1>
-      <ul>
-        <li>good {reviews.good}</li>
-        <li>neutral {reviews.neutral}</li>
-        <li>bad {reviews.bad}</li>
-        <li>all {total}</li>
-        <li>
-          positive {reviews.good === 0 ? 0 : (reviews.good / total) * 100}%
-        </li>
-      </ul>
-    </div>
+    <button onClick={() => handleClick(displayText)}>{displayText}</button>
   );
 };
 
-const GiveFeedback = ({ handleClick }) => {
+const DisplayStatistic = ({ displayStatistic, displayText }) => {
   return (
-    <div>
-      <h1>Give Feedback</h1>
-      <button onClick={() => handleClick("good")}>good</button>
-      <button onClick={() => handleClick("neutral")}>neutral</button>
-      <button onClick={() => handleClick("bad")}>bad</button>
-    </div>
+    <li>
+      {displayText}: {displayStatistic}
+    </li>
   );
 };
-
 function App() {
   const [reviews, setReviews] = useState({ good: 0, neutral: 0, bad: 0 });
   const handleReviews = (category) => {
@@ -53,7 +71,10 @@ function App() {
   };
   return (
     <div className="App">
-      <GiveFeedback handleClick={handleReviews} />
+      <h1>Give Feedback</h1>
+      <Button handleClick={handleReviews} displayText={"good"} />
+      <Button handleClick={handleReviews} displayText={"neutral"} />
+      <Button handleClick={handleReviews} displayText={"bad"} />
       <Statistics reviews={reviews} />
     </div>
   );
