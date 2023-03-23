@@ -1,8 +1,8 @@
-function Part(props) {
+function Part({ part }) {
   return (
     <div>
       <p>
-        {props.part} {props.exercises}
+        {part.name} {part.exercises}
       </p>
     </div>
   );
