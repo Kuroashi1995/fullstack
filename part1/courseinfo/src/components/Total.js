@@ -6,8 +6,7 @@ function Total({ parts }) {
   return (
     <div>
       <p>
-        Number of exercises &nbsp;
-        {sum}
+        <b>Total of {sum} exercises</b>
       </p>
     </div>
   );
