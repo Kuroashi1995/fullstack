@@ -5,9 +5,9 @@ import Total from "./Total";
 const Course = ({ courses }) => {
   return (
     <div className="App">
-      <Header course={courses} />
+      <Header name={courses.name} />
       <Content course={courses} />
-      <Total course={courses} />
+      <Total parts={courses.parts} />
     </div>
   );
 };
