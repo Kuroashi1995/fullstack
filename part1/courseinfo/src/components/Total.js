@@ -1,11 +1,13 @@
-function Total({ course }) {
+function Total({ parts }) {
+  let sum = 0;
+  for (let part of parts) {
+    sum += part.exercises;
+  }
   return (
     <div>
       <p>
-        Number of exercises{" "}
-        {course.parts[0].exercises +
-          course.parts[1].exercises +
-          course.parts[2].exercises}
+        Number of exercises &nbsp;
+        {sum}
       </p>
     </div>
   );
