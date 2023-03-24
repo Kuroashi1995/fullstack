@@ -1,13 +1,12 @@
+import Contact from "./Contact";
+
 const ShowContacts = ({ contacts }) => {
   return (
     <div>
       <h2>Contacts:</h2>
       <ul>
         {contacts.map((contact) => (
-          <li key={contact.name}>
-            {"Nombre: " + contact.name}
-            {" -> Numero: " + contact.phone}{" "}
-          </li>
+          <Contact contact={contact} key={contact.name}/>
         ))}
       </ul>
     </div>

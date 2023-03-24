@@ -12,7 +12,6 @@ const AddContact = ({ updateContacts }) => {
       name: event.target[0].value,
       phone: event.target[1].value,
     };
-    console.log(newContact);
     updateContacts(newContact);
     setTextValue("");
     setPhoneValue("");
