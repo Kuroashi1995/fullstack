@@ -4,25 +4,22 @@ import ShowContacts from "./components/ShowContacts";
 
 function App() {
   //States
-  const [contacts, setContacts] = useState([{ id: 1, name: "Andrew Halley" }]);
+  const [contacts, setContacts] = useState([
+    { name: "Andrew", phone: "099Solido" },
+  ]);
 
   //Functions
-  const updateContacts = (contactName) => {
-    console.log(
-      "updateContacts",
-      contacts.find(
-        (contact) => contact.name.toLowerCase() === contactName.toLowerCase()
-      )
-    );
+  const updateContacts = (newContact) => {
+    console.log("updateContacts", newContact);
     if (
       contacts.find(
-        (contact) => contact.name.toLowerCase() === contactName.toLowerCase()
+        (contact) =>
+          contact.name.toLowerCase() === newContact.name.toLowerCase()
       ) === undefined
     ) {
-      const contactObject = { id: contacts.length + 1, name: contactName };
-      setContacts(contacts.concat(contactObject));
+      setContacts(contacts.concat(newContact));
     } else {
-      alert("Contact already exists");
+      alert(`${newContact.name} already exists in the phonebook`);
     }
   };
 

@@ -3,8 +3,11 @@ const ShowContacts = ({ contacts }) => {
     <div>
       <h2>Contacts:</h2>
       <ul>
-        {contacts.map((contact, index) => (
-          <li key={contact.id}>{contact.name}</li>
+        {contacts.map((contact) => (
+          <li key={contact.name}>
+            {"Nombre: " + contact.name}
+            {" -> Numero: " + contact.phone}{" "}
+          </li>
         ))}
       </ul>
     </div>

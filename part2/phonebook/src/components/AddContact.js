@@ -3,17 +3,28 @@ import { useState } from "react";
 const AddContact = ({ updateContacts }) => {
   //States
   const [textValue, setTextValue] = useState("");
+  const [phoneValue, setPhoneValue] = useState("");
 
   //Functions
   const handleSubmit = (event) => {
     event.preventDefault();
-    updateContacts(event.target[0].value);
+    const newContact = {
+      name: event.target[0].value,
+      phone: event.target[1].value,
+    };
+    console.log(newContact);
+    updateContacts(newContact);
     setTextValue("");
+    setPhoneValue("");
   };
 
-  const handleChange = (event) => {
+  const handleNameChange = (event) => {
     const newValue = event.target.value;
     setTextValue(newValue);
+  };
+  const handlePhoneChange = (event) => {
+    const newValue = event.target.value;
+    setPhoneValue(newValue);
   };
 
   //Component
@@ -21,8 +32,18 @@ const AddContact = ({ updateContacts }) => {
     <div>
       <h2>Add Contact:</h2>
       <form onSubmit={handleSubmit}>
-        name:{" "}
-        <input type="text" value={textValue} onChange={handleChange}></input>
+        Name:{" "}
+        <input
+          type="text"
+          value={textValue}
+          onChange={handleNameChange}
+        ></input>
+        Phone:{" "}
+        <input
+          type="text"
+          value={phoneValue}
+          onChange={handlePhoneChange}
+        ></input>{" "}
         <button type="submit">Save</button>
       </form>
     </div>
