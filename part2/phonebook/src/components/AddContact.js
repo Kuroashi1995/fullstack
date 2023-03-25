@@ -12,9 +12,11 @@ const AddContact = ({ updateContacts }) => {
       name: event.target[0].value,
       phone: event.target[1].value,
     };
-    updateContacts(newContact);
-    setTextValue("");
-    setPhoneValue("");
+    const success = updateContacts(newContact);
+    if (success) {
+      setTextValue("");
+      setPhoneValue("");
+    }
   };
 
   const handleNameChange = (event) => {

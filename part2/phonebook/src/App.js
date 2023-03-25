@@ -20,8 +20,10 @@ function App() {
     ) {
       setContacts(contacts.concat(newContact));
       setShownContacts(contacts.concat(newContact));
+      return true;
     } else {
       alert(`${newContact.name} already exists in the phonebook`);
+      return false
     }
   };
 
