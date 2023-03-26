@@ -1,0 +1,10 @@
+{
+  "phonebook": [
+    { "name": "Andrew", "phone": "099Solido" },
+    { "name": "Manu", "phone": "099Porro" },
+    { "name": "Sergio", "phone": "099Musica" },
+    { "name": "Manu'i", "phone": "099Mewacagarenguita" },
+    { "name": "Jose", "phone": "099Chefi" },
+    { "name": "Joselo", "phone": "099Turbina" }
+  ]
+}
