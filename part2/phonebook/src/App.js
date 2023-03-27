@@ -27,8 +27,16 @@ function App() {
           contact.name.toLowerCase() === newContact.name.toLowerCase()
       ) === undefined
     ) {
-      setContacts(contacts.concat(newContact));
-      setShownContacts(contacts.concat(newContact));
+      console.log("App > updateContacts > If > newContact param >", newContact);
+      dbContacts.create({ newContact }).then((responseContact) => {
+        console.log(
+          "App > UpdateContacts > dbCreate > responseContact >",
+          responseContact
+        );
+        setContacts(contacts.concat(responseContact));
+        setShownContacts(contacts.concat(responseContact));
+      });
+
       return true;
     } else {
       alert(`${newContact.name} already exists in the phonebook`);
