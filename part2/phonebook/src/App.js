@@ -1,14 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddContact from "./components/AddContact";
 import ShowContacts from "./components/ShowContacts";
 import SearchBar from "./components/SearchBar";
+import dbContacts from "./services/contacts";
 
 function App() {
   //States
-  const [contacts, setContacts] = useState([
-    { name: "Andrew", phone: "099Solido" },
-  ]);
+  const [contacts, setContacts] = useState([]);
   const [showContacts, setShownContacts] = useState(contacts);
+
+  //Effects
+  useEffect(() => {
+    console.log("EffectStarted");
+    dbContacts.getAll().then((contacts) => {
+      console.log(contacts);
+      setContacts(contacts);
+      setShownContacts(contacts);
+    });
+  }, []);
 
   //Functions
   const updateContacts = (newContact) => {
@@ -23,7 +32,7 @@ function App() {
       return true;
     } else {
       alert(`${newContact.name} already exists in the phonebook`);
-      return false
+      return false;
     }
   };
 
