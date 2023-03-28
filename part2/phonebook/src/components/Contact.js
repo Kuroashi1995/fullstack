@@ -1,6 +1,6 @@
 const Contact = ({ contact, handleClick }) => {
   return (
-    <li>
+    <li className="contact">
       {"Nombre: " + contact.name}
       {" -> Numero: " + contact.phone}{" "}
       <button type="button" onClick={() => handleClick(contact.id)}>
