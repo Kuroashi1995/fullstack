@@ -20,6 +20,7 @@ function App() {
 
   //Functions
   const updateContacts = (newContact) => {
+    console.log("App > updateContacts > newContact = ", newContact);
     if (
       contacts.find(
         (contact) =>
@@ -33,8 +34,33 @@ function App() {
 
       return true;
     } else {
-      alert(`${newContact.name} already exists in the phonebook`);
-      return false;
+      const changeNumberConfirmation = window.confirm(
+        `change ${newContact.name} number to ${newContact.phone}?`
+      );
+      if (changeNumberConfirmation) {
+        newContact = {
+          ...contacts.find((contact) => contact.name === newContact.name),
+          phone: newContact.phone,
+        };
+        dbContacts
+          .update({ newContact: newContact })
+          .then((responseContact) => {
+            console.log(
+              "App > updateContacts > update > then > responseContact = ",
+              responseContact
+            );
+            const newContacts = contacts.map((contact) => {
+              return contact.id === responseContact.id
+                ? responseContact
+                : contact;
+            });
+            setContacts(newContacts);
+            setShownContacts(newContacts);
+          });
+        return true;
+      } else {
+        return false;
+      }
     }
   };
 
@@ -65,13 +91,9 @@ function App() {
           break;
         }
       }
-      console.log("App > deleteContact > newContactsVar", newContacts);
       newContacts.splice(deleteIndex, 1);
-      console.log("App > deleteContact > newContactsVarSpliced", newContacts);
       setContacts(newContacts);
-      console.log("llega a App > deleteContact > setContacts");
       setShownContacts(newContacts);
-      console.log("LLega a App > deleteContact > setShownContacts");
     }
   };
 

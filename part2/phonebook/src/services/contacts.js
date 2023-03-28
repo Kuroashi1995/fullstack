@@ -14,8 +14,9 @@ const create = ({ newContact }) => {
   });
 };
 
-const update = (id, newContact) => {
-  const request = axios.put(`${dbUrl}/${id}`, newContact);
+const update = ({ newContact }) => {
+  console.log("Contacts service > update > newContact =", newContact);
+  const request = axios.put(`${dbUrl}/${newContact.id}`, newContact);
   return request.then((response) => response.data);
 };
 
