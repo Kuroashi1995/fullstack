@@ -11,29 +11,9 @@
       "id": 2
     },
     {
-      "name": "Sergio",
-      "phone": "099Musica",
-      "id": 3
-    },
-    {
-      "name": "Manu'i",
-      "phone": "099Mewacagarenguita",
-      "id": 4
-    },
-    {
-      "name": "Jose",
-      "phone": "099Chefi",
-      "id": 5
-    },
-    {
       "name": "Joselo",
       "phone": "099Turbina",
-      "id": 6
-    },
-    {
-      "name": "Lore",
-      "phone": "099Estres",
-      "id": 7
+      "id": 5
     }
   ]
 }

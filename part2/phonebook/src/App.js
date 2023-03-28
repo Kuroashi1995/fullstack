@@ -7,13 +7,12 @@ import dbContacts from "./services/contacts";
 function App() {
   //States
   const [contacts, setContacts] = useState([]);
-  const [showContacts, setShownContacts] = useState(contacts);
+  const [showContacts, setShownContacts] = useState([]);
 
   //Effects
   useEffect(() => {
-    console.log("EffectStarted");
+    console.log("effect triggered");
     dbContacts.getAll().then((contacts) => {
-      console.log(contacts);
       setContacts(contacts);
       setShownContacts(contacts);
     });
@@ -27,12 +26,7 @@ function App() {
           contact.name.toLowerCase() === newContact.name.toLowerCase()
       ) === undefined
     ) {
-      console.log("App > updateContacts > If > newContact param >", newContact);
       dbContacts.create({ newContact }).then((responseContact) => {
-        console.log(
-          "App > UpdateContacts > dbCreate > responseContact >",
-          responseContact
-        );
         setContacts(contacts.concat(responseContact));
         setShownContacts(contacts.concat(responseContact));
       });
@@ -55,13 +49,39 @@ function App() {
     }
   };
 
+  const deleteContact = (contactId) => {
+    const confirmation = window.confirm(
+      `Are you sure you want to delete ${
+        contacts.find((contact) => contact.id === contactId).name
+      }?`
+    );
+    if (confirmation) {
+      let deleteIndex;
+      let newContacts = [...contacts];
+      dbContacts.deleteContact(contactId);
+      for (let index = 0; index <= contacts.length; index++) {
+        if (contacts[index].id === contactId) {
+          deleteIndex = index;
+          break;
+        }
+      }
+      console.log("App > deleteContact > newContactsVar", newContacts);
+      newContacts.splice(deleteIndex, 1);
+      console.log("App > deleteContact > newContactsVarSpliced", newContacts);
+      setContacts(newContacts);
+      console.log("llega a App > deleteContact > setContacts");
+      setShownContacts(newContacts);
+      console.log("LLega a App > deleteContact > setShownContacts");
+    }
+  };
+
   //Component
   return (
     <div className="App">
       <h1>Phonebook</h1>
       <AddContact updateContacts={updateContacts} />
       <SearchBar manageSearch={handleSearch} />
-      <ShowContacts contacts={showContacts} />
+      <ShowContacts contacts={showContacts} buttonCallback={deleteContact} />
     </div>
   );
 }
