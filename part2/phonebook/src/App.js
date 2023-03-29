@@ -3,25 +3,32 @@ import AddContact from "./components/AddContact";
 import ShowContacts from "./components/ShowContacts";
 import SearchBar from "./components/SearchBar";
 import dbContacts from "./services/contacts";
-import Error from "./components/Error";
+import Message from "./components/Message";
 
 function App() {
   //States
   const [contacts, setContacts] = useState([]);
   const [showContacts, setShownContacts] = useState([]);
-  const [error, setError] = useState({
+  const [message, setMessage] = useState({
     message: "",
     method: "",
-    error: false,
+    display: "no",
   });
 
   //Effects
   useEffect(() => {
-    dbContacts.getAll({ handleError: handleError }).then((contacts) => {
+    dbContacts.getAll({ handleMessage: handleMessage }).then((contacts) => {
       setContacts(contacts);
       setShownContacts(contacts);
     });
   }, []);
+
+  //objects
+  const messageObjetct = {
+    message: "",
+    method: "",
+    display: "no",
+  };
 
   //Functions
   //Add a contact
@@ -33,18 +40,23 @@ function App() {
       ) === undefined
     ) {
       dbContacts
-        .create({ newContact: newContact, handleError: handleError })
+        .create({ newContact: newContact, handleMessage: handleMessage })
         .then((responseContact) => {
           if (responseContact !== undefined) {
             setContacts(contacts.concat(responseContact));
             setShownContacts(contacts.concat(responseContact));
+            handleMessage({
+              ...messageObjetct,
+              message: `${responseContact.name} created successfully`,
+              display: "message",
+            });
           }
         });
 
       return true;
     } else {
       const changeNumberConfirmation = window.confirm(
-        `change ${newContact.name} number to ${newContact.phone}?`
+        `Change ${newContact.name} number to ${newContact.phone}?`
       );
       if (changeNumberConfirmation) {
         newContact = {
@@ -52,7 +64,7 @@ function App() {
           phone: newContact.phone,
         };
         dbContacts
-          .update({ newContact: newContact })
+          .update({ newContact: newContact, handleMessage: handleMessage })
           .then((responseContact) => {
             const newContacts = contacts.map((contact) => {
               return contact.id === responseContact.id
@@ -61,6 +73,11 @@ function App() {
             });
             setContacts(newContacts);
             setShownContacts(newContacts);
+            handleMessage({
+              ...messageObjetct,
+              message: `${responseContact.name} phone changed to ${responseContact.phone} successfully`,
+              display: "message",
+            });
           });
         return true;
       }
@@ -88,7 +105,7 @@ function App() {
     if (confirmation) {
       let deleteIndex;
       let newContacts = [...contacts];
-      dbContacts.deleteContact({ id: contactId, handleError: handleError });
+      dbContacts.deleteContact({ id: contactId, handleMessage: handleMessage });
       for (let index = 0; index <= contacts.length; index++) {
         if (contacts[index].id === contactId) {
           deleteIndex = index;
@@ -98,20 +115,26 @@ function App() {
       newContacts.splice(deleteIndex, 1);
       setContacts(newContacts);
       setShownContacts(newContacts);
+      handleMessage({
+        ...messageObjetct,
+        message: "Contact deleted successfully",
+        display: "message",
+      });
     }
   };
-  const handleError = (error) => {
-    setError(error);
+  const handleMessage = (message) => {
+    setMessage(message);
+    const displayingMessage = { ...message, display: "no" };
     setTimeout(() => {
-      setError({ ...error, error: false });
+      setMessage(displayingMessage);
     }, 5000);
   };
 
   //Component
-  return error.error ? (
+  return message.display !== "no" ? (
     <div className="App">
-      <Error error={error} />
       <h1>Phonebook</h1>
+      <Message message={message} />
       <AddContact updateContacts={updateContacts} />
       <SearchBar manageSearch={handleSearch} />
       <ShowContacts contacts={showContacts} buttonCallback={deleteContact} />

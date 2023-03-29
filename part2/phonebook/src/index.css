@@ -14,3 +14,10 @@ h1 {
   background: rgba(256, 0, 0, 0.3);
   border-radius: 5px;
 }
+.message {
+  padding: 10px;
+  border-style: solid;
+  border-color: black;
+  background: rgba(3, 252, 15, 0.3);
+  border-radius: 5px;
+}
