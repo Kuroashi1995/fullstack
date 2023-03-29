@@ -3,34 +3,43 @@ import AddContact from "./components/AddContact";
 import ShowContacts from "./components/ShowContacts";
 import SearchBar from "./components/SearchBar";
 import dbContacts from "./services/contacts";
+import Error from "./components/Error";
 
 function App() {
   //States
   const [contacts, setContacts] = useState([]);
   const [showContacts, setShownContacts] = useState([]);
+  const [error, setError] = useState({
+    message: "",
+    method: "",
+    error: false,
+  });
 
   //Effects
   useEffect(() => {
-    console.log("effect triggered");
-    dbContacts.getAll().then((contacts) => {
+    dbContacts.getAll({ handleError: handleError }).then((contacts) => {
       setContacts(contacts);
       setShownContacts(contacts);
     });
   }, []);
 
   //Functions
+  //Add a contact
   const updateContacts = (newContact) => {
-    console.log("App > updateContacts > newContact = ", newContact);
     if (
       contacts.find(
         (contact) =>
           contact.name.toLowerCase() === newContact.name.toLowerCase()
       ) === undefined
     ) {
-      dbContacts.create({ newContact }).then((responseContact) => {
-        setContacts(contacts.concat(responseContact));
-        setShownContacts(contacts.concat(responseContact));
-      });
+      dbContacts
+        .create({ newContact: newContact, handleError: handleError })
+        .then((responseContact) => {
+          if (responseContact !== undefined) {
+            setContacts(contacts.concat(responseContact));
+            setShownContacts(contacts.concat(responseContact));
+          }
+        });
 
       return true;
     } else {
@@ -45,10 +54,6 @@ function App() {
         dbContacts
           .update({ newContact: newContact })
           .then((responseContact) => {
-            console.log(
-              "App > updateContacts > update > then > responseContact = ",
-              responseContact
-            );
             const newContacts = contacts.map((contact) => {
               return contact.id === responseContact.id
                 ? responseContact
@@ -58,9 +63,8 @@ function App() {
             setShownContacts(newContacts);
           });
         return true;
-      } else {
-        return false;
       }
+      return false;
     }
   };
 
@@ -84,7 +88,7 @@ function App() {
     if (confirmation) {
       let deleteIndex;
       let newContacts = [...contacts];
-      dbContacts.deleteContact(contactId);
+      dbContacts.deleteContact({ id: contactId, handleError: handleError });
       for (let index = 0; index <= contacts.length; index++) {
         if (contacts[index].id === contactId) {
           deleteIndex = index;
@@ -96,9 +100,20 @@ function App() {
       setShownContacts(newContacts);
     }
   };
+  const handleError = (error) => {
+    setError(error);
+  };
 
   //Component
-  return (
+  return error.error ? (
+    <div className="App">
+      <Error error={error} />
+      <h1>Phonebook</h1>
+      <AddContact updateContacts={updateContacts} />
+      <SearchBar manageSearch={handleSearch} />
+      <ShowContacts contacts={showContacts} buttonCallback={deleteContact} />
+    </div>
+  ) : (
     <div className="App">
       <h1>Phonebook</h1>
       <AddContact updateContacts={updateContacts} />

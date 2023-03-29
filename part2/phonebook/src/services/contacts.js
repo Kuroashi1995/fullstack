@@ -2,35 +2,58 @@ import axios from "axios";
 
 const dbUrl = "http://localhost:3001/phonebook";
 
-const getAll = () => {
+const getAll = ({ handleError }) => {
   const request = axios.get(dbUrl);
   return request
     .then((response) => response.data)
-    .catch((error) => alert(`Cannot get contacts, error: ${error}`));
+    .catch((error) =>
+      handleError({
+        message: error.message,
+        method: "getting contacts",
+        error: true,
+      })
+    );
 };
 
-const create = ({ newContact }) => {
+const create = ({ newContact, handleError }) => {
   const request = axios.post(dbUrl, newContact);
   return request
     .then((response) => {
       return response.data;
     })
-    .catch((error) => alert(`Cannot create contact, error: ${error}`));
+    .catch((error) =>
+      handleError({
+        message: error.message,
+        method: "creating contact",
+        error: true,
+      })
+    );
 };
 
-const update = ({ newContact }) => {
-  console.log("Contacts service > update > newContact =", newContact);
+const update = ({ newContact, handleError }) => {
   const request = axios.put(`${dbUrl}/${newContact.id}`, newContact);
   return request
     .then((response) => response.data)
-    .catch((error) => alert(`Cannot update contact, error: ${error}`));
+    .catch((error) =>
+      handleError({
+        message: error.message,
+        method: "updating contact",
+        error: true,
+      })
+    );
 };
 
-const deleteContact = (id) => {
+const deleteContact = ({ id, handleError }) => {
   const request = axios.delete(`${dbUrl}/${id}`);
   return request
     .then((response) => response)
-    .catch((error) => alert(`Cannot delete contact, error: ${error}`));
+    .catch((error) => {
+      return handleError({
+        message: error.message,
+        method: "deleting contact",
+        error: true,
+      });
+    });
 };
 
 //definition for the export
