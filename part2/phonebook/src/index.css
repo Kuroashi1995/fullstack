@@ -7,3 +7,10 @@ h1 {
   padding-top: 3px;
   font-size: 15px;
 }
+.error {
+  padding: 10px;
+  border-style: solid;
+  border-color: black;
+  background: rgba(256, 0, 0, 0.3);
+  border-radius: 5px;
+}

@@ -102,6 +102,9 @@ function App() {
   };
   const handleError = (error) => {
     setError(error);
+    setTimeout(() => {
+      setError({ ...error, error: false });
+    }, 5000);
   };
 
   //Component
