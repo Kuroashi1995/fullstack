@@ -1,4 +1,5 @@
 import { useState } from "react";
+import WeatherRepository from "../services/weather";
 
 const CountryDetails = ({ shoudlShow, country }) => {
   //States
@@ -9,6 +10,18 @@ const CountryDetails = ({ shoudlShow, country }) => {
   const handleClick = () => {
     setShown(!shown);
   };
+
+  //Fetching info
+  if (shown) {
+    console.log(country.latlng)
+    const weatherInfo = WeatherRepository.getCapitalWeather({
+      lat: country.latlng[0],
+      lng: country.latlng[1],
+    }).then((response) => response);
+    console.log(weatherInfo);
+  }
+
+  //Component
   return shown ? (
     <div>
       <h1>
