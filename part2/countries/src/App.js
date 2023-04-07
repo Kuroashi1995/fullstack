@@ -1,5 +1,47 @@
+import { useState } from "react";
+import { useEffect } from "react";
+import CountriesRepository from "./services/countries";
+import SearchBar from "./components/SearchBar";
+import ShowCountries from "./components/ShowCountries";
+
 function App() {
-  return <div className="App"></div>;
+  //States
+  const [countries, setCountries] = useState(null);
+  const [searchText, setSearchText] = useState("");
+  const [filteredCountries, setFilteredCountries] = useState([]);
+
+  //Effect
+  useEffect(() => {
+    CountriesRepository.getCountries().then((response) => {
+      console.log("UseEffectResponse: ", response);
+      return setCountries(response);
+    });
+  }, []);
+
+  //Functions
+  const handleChange = ({ searchInput }) => {
+    const newfilteredCountries = countries.filter((element) => {
+      console.log("App > handleChange > Map > searchInput:", searchInput);
+      return element.name.common
+        .toLowerCase()
+        .includes(searchInput.toLowerCase());
+      //mdn string.contains;
+    });
+    console.log(
+      "App > handleChange > newFilteredCountries:",
+      newfilteredCountries
+    );
+    setFilteredCountries(newfilteredCountries);
+    setSearchText(searchInput);
+  };
+
+  //Component
+  return (
+    <div className="App">
+      <SearchBar searchText={searchText} handleOnChange={handleChange} />
+      <ShowCountries filteredCountries={filteredCountries} />
+    </div>
+  );
 }
 
 export default App;
