@@ -13,7 +13,6 @@ function App() {
   //Effect
   useEffect(() => {
     CountriesRepository.getCountries().then((response) => {
-      console.log("UseEffectResponse: ", response);
       return setCountries(response);
     });
   }, []);
@@ -21,16 +20,11 @@ function App() {
   //Functions
   const handleChange = ({ searchInput }) => {
     const newfilteredCountries = countries.filter((element) => {
-      console.log("App > handleChange > Map > searchInput:", searchInput);
       return element.name.common
         .toLowerCase()
         .includes(searchInput.toLowerCase());
       //mdn string.contains;
     });
-    console.log(
-      "App > handleChange > newFilteredCountries:",
-      newfilteredCountries
-    );
     setFilteredCountries(newfilteredCountries);
     setSearchText(searchInput);
   };
