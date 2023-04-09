@@ -3,7 +3,6 @@ import axios from "axios";
 const baseUrl = "https://api.openweathermap.org/data/3.0/onecall";
 
 const getCapitalWeather = async ({ lat, lng }) => {
-  console.log(lat, lng);
   return await axios
     .get(baseUrl, {
       params: {
