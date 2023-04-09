@@ -1,12 +1,6 @@
 import CountryDetails from "./CountryDetails";
 
 const ShowCountries = ({ filteredCountries }) => {
-  if (filteredCountries.length !== 0) {
-    console.log(
-      "ShowCountriesComponent > filteredCountries:",
-      Object.entries(filteredCountries[0].languages)
-    );
-  }
   if (filteredCountries.length > 10) {
     return (
       <div>
@@ -24,7 +18,7 @@ const ShowCountries = ({ filteredCountries }) => {
       </div>
     );
   } else {
-    return <CountryDetails country={filteredCountries[0]} shoudlShow={true} />;
+    return <CountryDetails country={filteredCountries[0]} shouldShow={true} />;
   }
 };
 export default ShowCountries;
