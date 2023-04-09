@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import WeatherRepository from "../services/weather";
 
-const CountryDetails = ({ shoudlShow, country }) => {
+const CountryDetails = ({ shouldShow, country }) => {
   //States
   const [shown, setShown] = useState(false);
-  if (shoudlShow) setShown(shoudlShow);
+  const [weatherInfo, setWeatherInfo] = useState(null);
+  if (shouldShow === true && shown !== true) {
+    console.log("CountryDetails > if > shouldShow:", shouldShow);
+    setShown(shouldShow);
+  }
 
   //Functions
   const handleClick = () => {
@@ -12,14 +16,18 @@ const CountryDetails = ({ shoudlShow, country }) => {
   };
 
   //Fetching info
-  if (shown) {
-    console.log(country.latlng)
-    const weatherInfo = WeatherRepository.getCapitalWeather({
-      lat: country.latlng[0],
-      lng: country.latlng[1],
-    }).then((response) => response);
-    console.log(weatherInfo);
-  }
+
+  useEffect(() => {
+    if (shown) {
+      WeatherRepository.getCapitalWeather({
+        lat: country.latlng[0],
+        lng: country.latlng[1],
+      }).then((response) => {
+        console.log(response);
+        setWeatherInfo(response);
+      });
+    }
+  }, [country.latlng, shown]);
 
   //Component
   return shown ? (
@@ -41,6 +49,23 @@ const CountryDetails = ({ shoudlShow, country }) => {
       <div>
         <img src={country.flags.png} alt={country.flags.alt}></img>
       </div>
+      {weatherInfo !== null ? (
+        <div>
+          <h3>Weather in {country.capital}</h3>
+          <p>temperature: {weatherInfo.current.temp} Celsius</p>
+          <img
+            src={
+              "http://openweathermap.org/img/wn/" +
+              weatherInfo.current.weather[0].icon +
+              "@2x.png"
+            }
+            alt={weatherInfo.current.weather[0].description}
+          ></img>
+          <p>wind {weatherInfo.current.wind_speed} m/s</p>
+        </div>
+      ) : (
+        <div>false</div>
+      )}
       <button onClick={handleClick}>{shown ? "Show Less" : "Show"}</button>
       <br></br>
       <br></br>
