@@ -1,0 +1,12 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "first practice server from fullstack course",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "wooo testing"
+  },
+  "author": "Andrew Halley",
+  "license": "MIT"
+}
