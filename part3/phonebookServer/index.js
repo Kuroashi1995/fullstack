@@ -34,7 +34,8 @@ app.get("/api/persons", (request, response) => {
 
 app.get("/api/persons/:id", (request, response) => {
   id = Number(request.params.id);
-  response.json(data.find((contact) => contact.id === id));
+  contact = data.find((contact) => contact.id === id);
+  contact ? response.json(contact) : response.status(404).end();
 });
 
 app.get("/info", (request, response) => {
