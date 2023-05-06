@@ -32,6 +32,11 @@ app.get("/api/persons", (request, response) => {
   response.json(data);
 });
 
+app.get("/api/persons/:id", (request, response) => {
+  id = Number(request.params.id);
+  response.json(data.find((contact) => contact.id === id));
+});
+
 app.get("/info", (request, response) => {
   response.send(
     `<div><p>This phonebook cointains information about ${
