@@ -48,6 +48,12 @@ app.get("/info", (request, response) => {
   );
 });
 
+app.delete("/api/persons/:id", (request, response) => {
+  const id = Number(request.params.id);
+  data = data.filter((contact) => contact.id !== id);
+  response.status(204).end();
+});
+
 app.post("/api/persons", (request, response) => {
   id = generateId();
   const body = request.body;
