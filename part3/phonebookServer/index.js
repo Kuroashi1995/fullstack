@@ -62,6 +62,10 @@ app.post("/api/persons", (request, response) => {
     response.status(400).json({
       error: "missing content",
     });
+  } else if (data.find((contact) => contact.name === body.name)) {
+    response.status(400).json({
+      error: "name must be unique",
+    });
   }
   const contact = {
     id: id,
