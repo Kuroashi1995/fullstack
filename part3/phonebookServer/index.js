@@ -1,10 +1,12 @@
 const express = require("express");
 const app = express();
 
-const sumEntries = () => {
-  return data.length;
-};
+app.use(express.json());
 
+const generateId = () => {
+  id = Math.round(1 + Math.random() * 100);
+  return id;
+};
 data = [
   {
     id: 1,
@@ -44,6 +46,24 @@ app.get("/info", (request, response) => {
       data.length
     } people</p> <p>${Date(Date.now())}</p></div>`
   );
+});
+
+app.post("/api/persons", (request, response) => {
+  id = generateId();
+  const body = request.body;
+  console.log(body);
+  if (!body.name || !body.number) {
+    response.status(400).json({
+      error: "missing content",
+    });
+  }
+  const contact = {
+    id: id,
+    name: body.name,
+    number: body.number,
+  };
+  data = data.concat(contact);
+  response.json(contact);
 });
 
 const PORT = 3001;
