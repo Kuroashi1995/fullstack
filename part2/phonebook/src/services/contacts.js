@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const dbUrl = "http://localhost:3001/phonebook";
+const dbUrl = "/api/persons";
 
 const getAll = ({ handleMessage }) => {
   const request = axios.get(dbUrl);
