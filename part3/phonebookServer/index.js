@@ -20,6 +20,7 @@ morgan.token("body", (req, res) => {
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static("build"));
 app.use(
   morgan((tokens, req, res) => {
     return [
@@ -39,22 +40,22 @@ data = [
   {
     id: 1,
     name: "Arto Hellas",
-    number: "040-123456",
+    phone: "040-123456",
   },
   {
     id: 2,
     name: "Ada Lovelace",
-    number: "39-44-5323523",
+    phone: "39-44-5323523",
   },
   {
     id: 3,
     name: "Dan Abramov",
-    number: "12-43-234345",
+    phone: "12-43-234345",
   },
   {
     id: 4,
     name: "Mary Poppendieck",
-    number: "39-23-6423122",
+    phone: "39-23-6423122",
   },
 ];
 
@@ -89,7 +90,7 @@ app.post("/api/persons", (request, response) => {
   id = generateId();
   const body = request.body;
   console.log(body);
-  if (!body.name || !body.number) {
+  if (!body.name || !body.phone) {
     response.status(400).json({
       error: "missing content",
     });
@@ -101,7 +102,7 @@ app.post("/api/persons", (request, response) => {
   const contact = {
     id: id,
     name: body.name,
-    number: body.number,
+    phone: body.phone,
   };
   data = data.concat(contact);
   response.json(contact);
