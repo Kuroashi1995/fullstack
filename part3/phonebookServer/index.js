@@ -1,3 +1,4 @@
+const { getContacts, addContact } = require("./services/Database");
 const express = require("express");
 var morgan = require("morgan");
 const app = express();
@@ -36,81 +37,55 @@ app.use(
   })
 );
 
-data = [
-  {
-    id: 1,
-    name: "Arto Hellas",
-    phone: "040-123456",
-  },
-  {
-    id: 2,
-    name: "Ada Lovelace",
-    phone: "39-44-5323523",
-  },
-  {
-    id: 3,
-    name: "Dan Abramov",
-    phone: "12-43-234345",
-  },
-  {
-    id: 4,
-    name: "Mary Poppendieck",
-    phone: "39-23-6423122",
-  },
-];
-
 app.get("/", (request, response) => {
   response.send("<h1> Welcome to my Phonebook </h1>");
 });
-app.get("/api/persons", (request, response) => {
-  response.json(data);
+app.get("/api/persons", async (request, response) => {
+  response.json(await getContacts());
 });
 
 app.get("/api/persons/:id", (request, response) => {
   id = Number(request.params.id);
-  contact = data.find((contact) => contact.id === id);
+  contact = getContacts().find((contact) => contact.id === id);
   contact ? response.json(contact) : response.status(404).end();
 });
 
 app.get("/info", (request, response) => {
   response.send(
     `<div><p>This phonebook cointains information about ${
-      data.length
+      getContacts().length
     } people</p> <p>${Date(Date.now())}</p></div>`
   );
 });
 
 app.delete("/api/persons/:id", (request, response) => {
-  const id = Number(request.params.id);
-  data = data.filter((contact) => contact.id !== id);
-  response.status(204).end();
+  console.log("not implemented");
 });
 
-app.post("/api/persons", (request, response) => {
-  id = generateId();
+app.post("/api/persons", async (request, response) => {
   const body = request.body;
+  const contacts = await getContacts();
   console.log(body);
   if (!body.name || !body.phone) {
     response.status(400).json({
       error: "missing content",
     });
-  } else if (data.find((contact) => contact.name === body.name)) {
+  } else if (contacts.find((contact) => contact.name === body.name)) {
     response.status(400).json({
       error: "name must be unique",
     });
   }
   const contact = {
-    id: id,
     name: body.name,
     phone: body.phone,
   };
-  data = data.concat(contact);
+  await addContact(contact);
   response.json(contact);
 });
 
 app.use(unknownEndpoint);
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
