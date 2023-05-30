@@ -1,12 +1,25 @@
-const { getContacts, addContact } = require("./services/Database");
+const {
+  getContacts,
+  addContact,
+  findContact,
+  deleteContact,
+  updateContact,
+} = require("./services/Database");
 const express = require("express");
 var morgan = require("morgan");
 const app = express();
 const cors = require("cors");
 
-const generateId = () => {
-  id = Math.round(1 + Math.random() * 100);
-  return id;
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message);
+
+  if (error.name === "CastError") {
+    return response.status(400).send({ error: "malformatted id" });
+  } else if (error.name === "ValidationError") {
+    return response.status(400).send({ error: "missing or incorrect content" });
+  }
+
+  next(error);
 };
 
 //middlewares
@@ -20,8 +33,8 @@ morgan.token("body", (req, res) => {
 });
 
 app.use(cors());
-app.use(express.json());
 app.use(express.static("build"));
+app.use(express.json());
 app.use(
   morgan((tokens, req, res) => {
     return [
@@ -40,50 +53,83 @@ app.use(
 app.get("/", (request, response) => {
   response.send("<h1> Welcome to my Phonebook </h1>");
 });
-app.get("/api/persons", async (request, response) => {
-  response.json(await getContacts());
-});
-
-app.get("/api/persons/:id", (request, response) => {
-  id = Number(request.params.id);
-  contact = getContacts().find((contact) => contact.id === id);
-  contact ? response.json(contact) : response.status(404).end();
-});
-
-app.get("/info", (request, response) => {
-  response.send(
-    `<div><p>This phonebook cointains information about ${
-      getContacts().length
-    } people</p> <p>${Date(Date.now())}</p></div>`
-  );
-});
-
-app.delete("/api/persons/:id", (request, response) => {
-  console.log("not implemented");
-});
-
-app.post("/api/persons", async (request, response) => {
-  const body = request.body;
-  const contacts = await getContacts();
-  console.log(body);
-  if (!body.name || !body.phone) {
-    response.status(400).json({
-      error: "missing content",
-    });
-  } else if (contacts.find((contact) => contact.name === body.name)) {
-    response.status(400).json({
-      error: "name must be unique",
-    });
+app.get("/api/persons", async (request, response, next) => {
+  try {
+    response.json(await getContacts());
+  } catch (error) {
+    (error) => next(error);
   }
-  const contact = {
-    name: body.name,
-    phone: body.phone,
+});
+
+app.put("/api/persons/:id", async (request, response, next) => {
+  console.log(request.params.id);
+  console.log(`Request body: ${JSON.stringify(request.body)}`);
+  const contactArg = {
+    name: request.body.name,
+    phone: request.body.phone,
   };
-  await addContact(contact);
-  response.json(contact);
+  console.log(`contactArg: ${JSON.stringify(contactArg)}`);
+  try {
+    contact = await updateContact(request.params.id, contactArg);
+    contact ? response.json(contact) : response.status(404).end();
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/api/persons/:id", async (request, response, next) => {
+  try {
+    contact = await findContact(request.params.id);
+    contact ? response.json(contact) : response.status(404).end();
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/info", async (request, response, next) => {
+  try {
+    contacts = await getContacts();
+    response.send(
+      `<div><p>This phonebook cointains information about ${
+        contacts.length
+      } people</p> <p>${Date(Date.now())}</p></div>`
+    );
+  } catch (error) {
+    (error) => next(error);
+  }
+});
+
+app.delete("/api/persons/:id", async (request, response, next) => {
+  try {
+    deletion = await deleteContact(request.params.id);
+    deletion ? response.status(204).end() : response.status(404).end();
+  } catch (error) {
+    (error) => next(error);
+  }
+});
+
+app.post("/api/persons", async (request, response, next) => {
+  const body = request.body;
+  try {
+    const contacts = await getContacts();
+    if (contacts.find((contact) => contact.name === body.name)) {
+      response.status(400).json({
+        error: "name must be unique",
+      });
+    }
+    const contact = {
+      name: body.name,
+      phone: body.phone,
+    };
+    await addContact(contact);
+    response.json(contact);
+  } catch (error) {
+    (error) => next(error);
+  }
 });
 
 app.use(unknownEndpoint);
+app.use(errorHandler);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
