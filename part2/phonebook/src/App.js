@@ -18,6 +18,7 @@ function App() {
   //Effects
   useEffect(() => {
     dbContacts.getAll({ handleMessage: handleMessage }).then((contacts) => {
+      console.log(contacts);
       setContacts(contacts);
       setShownContacts(contacts);
     });

@@ -1,5 +1,4 @@
 const Message = ({ message }) => {
-  console.log("Message component > message = ", message);
   const displayMessage =
     message.display === "error"
       ? `An error ocurred while ${message.method}, error message: ${message.message}`
