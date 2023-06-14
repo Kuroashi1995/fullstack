@@ -30,12 +30,11 @@ const contactSchema = new mongoose.Schema({
     type: String,
     validate: {
       validator: (v) => {
-        return v.length >= 5;
+        check = v.split("-");
+        return (check.length === 2 || check.length === 3) && v.length > 8;
       },
       message: (props) => {
-        props.value.length !== 0
-          ? "Phone is not long enough"
-          : "Phone is required";
+        props.value.length !== 0 ? "Wrong number format" : "Phone is required";
       },
     },
     required: true,
@@ -58,11 +57,9 @@ module.exports.getContacts = async () => {
 };
 
 module.exports.addContact = async (contactArg) => {
-  console.log(`Contact argument: ${contactArg}`);
   const contact = new Contact(contactArg);
-  console.log(`Contact after schema: ${contact}`);
   await Contact.create(contact).catch((error) => {
-    console.log(`an error ocurred: ${error}`);
+    throw error;
   });
 };
 
@@ -74,15 +71,12 @@ module.exports.findContact = async (contactId) => {
 
 module.exports.deleteContact = async (contactId) => {
   res = await Contact.findByIdAndDelete(contactId);
-  console.log(res);
   return res;
 };
 
 module.exports.updateContact = async (contactId, contactArg) => {
-  console.log(`contact: ${JSON.stringify(contactArg)}`);
   res = await Contact.findByIdAndUpdate(contactId, contactArg, {
     runValidators: true,
   });
-  console.log(res);
   return res;
 };

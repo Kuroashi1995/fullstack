@@ -11,7 +11,7 @@ const app = express();
 const cors = require("cors");
 
 const errorHandler = (error, request, response, next) => {
-  console.error(error.message);
+  console.error("se corrio error handler", error.name);
 
   if (error.name === "CastError") {
     return response.status(400).send({ error: "malformatted id" });
@@ -23,7 +23,10 @@ const errorHandler = (error, request, response, next) => {
 };
 
 //middlewares
-const unknownEndpoint = (request, response, next) => {
+const unknownEndpoint = (error, request, response, next) => {
+  if (error) {
+    next(error);
+  }
   response.status(404).send({
     error: "unknown endpoint",
   });
@@ -62,13 +65,11 @@ app.get("/api/persons", async (request, response, next) => {
 });
 
 app.put("/api/persons/:id", async (request, response, next) => {
-  console.log(request.params.id);
   console.log(`Request body: ${JSON.stringify(request.body)}`);
   const contactArg = {
     name: request.body.name,
     phone: request.body.phone,
   };
-  console.log(`contactArg: ${JSON.stringify(contactArg)}`);
   try {
     contact = await updateContact(request.params.id, contactArg);
     contact ? response.json(contact) : response.status(404).end();
@@ -124,7 +125,7 @@ app.post("/api/persons", async (request, response, next) => {
     await addContact(contact);
     response.json(contact);
   } catch (error) {
-    (error) => next(error);
+    next(error);
   }
 });
 
