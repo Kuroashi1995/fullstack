@@ -31,7 +31,7 @@ const unknownEndpoint = (error, request, response, next) => {
     error: "unknown endpoint",
   })
 }
-morgan.token("body", (req, res) => {
+morgan.token("body", (req) => {
   return `${JSON.stringify(req.body)}`
 })
 
@@ -71,7 +71,7 @@ app.put("/api/persons/:id", async (request, response, next) => {
     phone: request.body.phone,
   }
   try {
-    contact = await updateContact(request.params.id, contactArg)
+    const contact = await updateContact(request.params.id, contactArg)
     contact ? response.json(contact) : response.status(404).end()
   } catch (error) {
     next(error)
@@ -80,7 +80,7 @@ app.put("/api/persons/:id", async (request, response, next) => {
 
 app.get("/api/persons/:id", async (request, response, next) => {
   try {
-    contact = await findContact(request.params.id)
+    const contact = await findContact(request.params.id)
     contact ? response.json(contact) : response.status(404).end()
   } catch (error) {
     next(error)
@@ -89,7 +89,7 @@ app.get("/api/persons/:id", async (request, response, next) => {
 
 app.get("/info", async (request, response, next) => {
   try {
-    contacts = await getContacts()
+    const contacts = await getContacts()
     response.send(
       `<div><p>This phonebook cointains information about ${contacts.length
       } people</p> <p>${Date(Date.now())}</p></div>`
@@ -101,7 +101,7 @@ app.get("/info", async (request, response, next) => {
 
 app.delete("/api/persons/:id", async (request, response, next) => {
   try {
-    deletion = await deleteContact(request.params.id)
+    const deletion = await deleteContact(request.params.id)
     deletion ? response.status(204).end() : response.status(404).end()
   } catch (error) {
     (error) => next(error)
