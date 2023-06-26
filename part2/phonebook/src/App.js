@@ -69,7 +69,7 @@ function App() {
           .then((responseContact) => {
             const newContacts = contacts.map((contact) => {
               return contact.id === responseContact.id
-                ? responseContact
+                ? newContact
                 : contact;
             });
             setContacts(newContacts);
@@ -99,8 +99,7 @@ function App() {
 
   const deleteContact = (contactId) => {
     const confirmation = window.confirm(
-      `Are you sure you want to delete ${
-        contacts.find((contact) => contact.id === contactId).name
+      `Are you sure you want to delete ${contacts.find((contact) => contact.id === contactId).name
       }?`
     );
     if (confirmation) {
