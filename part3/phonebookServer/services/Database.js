@@ -11,6 +11,7 @@ mongoose.connect(MONGODB_URI)
 
 getContacts = async () => {
   const result = await Contact.find({})
+  logger.info(result)
   return result
 }
 
