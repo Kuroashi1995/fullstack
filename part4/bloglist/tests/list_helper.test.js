@@ -3,7 +3,7 @@ const listHelper = require("../utils/list_helper")
 testBlogs = [{
     title: 'First Post',
     author: 'Andru Jalei',
-    likes: 12
+    likes: 2
 },
 {
     title: 'Second Post',
@@ -18,12 +18,12 @@ testBlogs = [{
 {
     title: 'Fourth Post',
     author: 'Andru Jalei',
-    likes: 15
+    likes: 10
 },
 {
     title: 'Fifth Post',
     author: 'Andru Jalei',
-    likes: 14
+    likes: 7
 }]
 
 test('dummy returns 1', () => {
@@ -92,6 +92,30 @@ describe('Blogger with most blogs', () => {
         expect(listHelper.mostBlogs(testBlogs)).toStrictEqual({
             author: 'Andru Jalei',
             blogs: 3
+        })
+    })
+})
+
+describe('Blogger with most likes', () => {
+    test('If no blogs are passed, returns 0', () => {
+        expect(listHelper.mostLikes([])).toBe(0)
+    })
+
+    test('If only one blog is passed, returns the author and the likes', () => {
+        expect(listHelper.mostLikes([{
+            title: 'Test Blog',
+            author: 'Andru Jalei',
+            likes: 12
+        }])).toStrictEqual({
+            author: 'Andru Jalei',
+            likes: 12
+        })
+    })
+
+    test('If multiple post are passed, returns the most liked author', () => {
+        expect(listHelper.mostLikes(testBlogs)).toStrictEqual({
+            author: 'Andrew Halley',
+            likes: 31
         })
     })
 })

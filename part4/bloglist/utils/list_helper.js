@@ -5,11 +5,11 @@ const dummy = (blogs) => {
 }
 
 const totalLikes = (blogs) => {
-    let totalLikes = 0
     const reducer = (sum, item) => {
         sum += item.likes
         return sum
     }
+    let totalLikes = 0
     if (blogs.length !== 0) {
         totalLikes = blogs.reduce(reducer, 0)
     }
@@ -42,7 +42,6 @@ const mostBlogs = (blogs) => {
     })
 
     const maxBlogs = Math.max(...Object.values(bloggers))
-    console.log('maxBlogs', maxBlogs)
 
     const bestBloggerRaw = _.pickBy(bloggers, (value, key) => {
         return value === maxBlogs ? true : false
@@ -56,9 +55,36 @@ const mostBlogs = (blogs) => {
     return bestBlogger
 }
 
+const mostLikes = (blogs) => {
+
+    if (blogs.length === 0) {
+        return 0
+    }
+    let likes = []
+    const authors = _.flatMap(blogs, (blog) => {
+        return blog.author
+    })
+
+    for (author of authors) {
+        const auhtorlikes = blogs.reduce((total, blog) => {
+            return blog.author === author ? total + blog.likes : total
+        }, 0)
+        likes.push(auhtorlikes)
+    }
+
+    const mostLikedIndex = likes.indexOf(Math.max(...likes))
+
+    const mostLikedAuthor = {
+        author: authors[mostLikedIndex],
+        likes: likes[mostLikedIndex]
+    }
+    return mostLikedAuthor
+}
+
 module.exports = {
     dummy,
     totalLikes,
     favoriteBlog,
-    mostBlogs
+    mostBlogs,
+    mostLikes
 }
