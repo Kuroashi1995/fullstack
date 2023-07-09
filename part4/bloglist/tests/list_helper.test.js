@@ -1,5 +1,31 @@
 const listHelper = require("../utils/list_helper")
 
+testBlogs = [{
+    title: 'First Post',
+    author: 'Andru Jalei',
+    likes: 12
+},
+{
+    title: 'Second Post',
+    author: 'Andrew Halley',
+    likes: 13
+},
+{
+    title: 'Most Liked Post',
+    author: 'Andrew Halley',
+    likes: 18
+},
+{
+    title: 'Fourth Post',
+    author: 'Andru Jalei',
+    likes: 15
+},
+{
+    title: 'Fifth Post',
+    author: 'Andru Jalei',
+    likes: 14
+}]
+
 test('dummy returns 1', () => {
     const blogs = []
 
@@ -38,29 +64,34 @@ describe('Most liked posts', () => {
     })
 
     test('when there are many posts, it returns the most liked', () => {
-        expect(listHelper.favoriteBlog([{
-            title: 'First Post',
+        expect(listHelper.favoriteBlog(testBlogs)).toStrictEqual({
+            title: 'Most Liked Post',
+            author: 'Andrew Halley',
+            likes: 18
+        })
+    })
+})
+
+describe('Blogger with most blogs', () => {
+    test('If no blogs are passed returns 0', () => {
+        expect(listHelper.mostBlogs([])).toBe(0)
+    })
+
+    test('If only one blog is passed, returns the author and one post', () => {
+        expect(listHelper.mostBlogs([{
+            title: 'Test Blog',
             author: 'Andru Jalei',
             likes: 12
-        },
-        {
-            title: 'Second Post',
-            author: 'Andru Jalei',
-            likes: 13
-        },
-        {
-            title: 'Most Liked Post',
-            author: 'Andru Jalei',
-            likes: 18
-        },
-        {
-            title: 'Fourth Post',
-            author: 'Andru Jalei',
-            likes: 15
         }])).toStrictEqual({
-            title: 'Most Liked Post',
             author: 'Andru Jalei',
-            likes: 18
+            blogs: 1
+        })
+    })
+
+    test('If multiple posts are passed, the blogger with more blogs is returned', () => {
+        expect(listHelper.mostBlogs(testBlogs)).toStrictEqual({
+            author: 'Andru Jalei',
+            blogs: 3
         })
     })
 })
